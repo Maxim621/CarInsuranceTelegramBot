@@ -9,30 +9,27 @@ using Telegram.Bot;
 // Create a web application builder
 var builder = WebApplication.CreateBuilder(args);
 
-// Loading configuration settings
-var config = builder.Configuration;
-
 // Registering services
 builder.Services.AddControllers();  // Adds services for handling HTTP requests (e.g., Web API)
 
 // Registering the Telegram Bot service as a singleton to be shared across the app
 builder.Services.AddSingleton<ITelegramBotClient>(sp =>
 {
-var token = config["TelegramBotToken"];  // Fetching the Telegram bot token from configuration
+var token = builder.Configuration["TelegramBotToken"];  // Fetching the Telegram bot token from configuration
 return new TelegramBotClient(token);  // Returning a new TelegramBotClient instance
 });
 
 // Registering OpenAI service as a singleton for AI-related operations
 builder.Services.AddSingleton<OpenAIClient>(sp =>
 {
-var apiKey = config["OpenAIKey"];  // Fetching the OpenAI API key from configuration
+var apiKey = builder.Configuration["OpenAIKey"];  // Fetching the OpenAI API key from configuration
 return new OpenAIClient(new OpenAIAuthentication(apiKey));  // Returning a new OpenAIClient instance with the provided key
 });
 
 // Registering Mindee service as a singleton for document processing
 builder.Services.AddSingleton<MindeeService>(sp =>
 {
-var mindeeKey = config["MindeeApiKey"];  // Fetching the Mindee API key from configuration
+var mindeeKey = builder.Configuration["MindeeApiKey"];  // Fetching the Mindee API key from configuration
 return new MindeeService(mindeeKey);  // Returning a new MindeeService instance with the provided key
 });
 
